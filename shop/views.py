@@ -1,5 +1,9 @@
 from django.shortcuts import render
 
-# Create your views here.
+
 def homepage(request):
-    return render(request, 'index.html')
+    return render(request, 'pages/index.html')
+
+
+def shop_page(request):
+    return render(request, 'shop/shop.html')
