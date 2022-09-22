@@ -7,9 +7,15 @@
         <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
             <h1 class="font-weight-semi-bold text-uppercase mb-3">Our Shop</h1>
             <div class="d-inline-flex">
-                <p class="m-0"><a href="">Home</a></p>
+                <p class="m-0"><a href="{% url 'shop:homepage' %}">Home</a></p>
                 <p class="m-0 px-2">-</p>
+                {% if selected_category %}
+                <p class="m-0"><a href="{% url 'shop:shop_page' %}">Shop</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0">{{selected_category.category_name}}</p>
+                {% else %}
                 <p class="m-0">Shop</p>
+                {% endif %}
             </div>
         </div>
     </div>

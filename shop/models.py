@@ -1,10 +1,13 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import User, Group
+from django.urls import reverse
 from django.utils import timezone
 
 
 class ProductCategory(models.Model):
     category_name = models.CharField(max_length=30, blank=False, unique=True)
+    slug = models.SlugField(null=True)
 
     class Meta:
         verbose_name = "Product category"
@@ -12,6 +15,9 @@ class ProductCategory(models.Model):
 
     def __str__(self) -> str:
         return self.category_name
+
+    def get_absolute_url(self):
+        return reverse('shop:product_list_by_category', [self.slug])
 
 
 class Country(models.Model):
