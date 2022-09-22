@@ -104,9 +104,12 @@ class Employee(models.Model):
 class Product(models.Model):
     product_name = models.CharField(max_length=30)
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
-    # old_price = models.DecimalField(max_digits=10, decimal_places=2)
+    old_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     country = models.ForeignKey(Country, on_delete=models.DO_NOTHING)
     product_category = models.ForeignKey(ProductCategory, on_delete=models.DO_NOTHING)
+    details = models.TextField(max_length=500, blank=True)
+    description = models.TextField(max_length=2000, blank=True)
+    rating = models.IntegerField(default=0)
     photo = models.ImageField(upload_to='products/', blank=True)
 
     class Meta:
