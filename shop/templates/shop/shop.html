@@ -73,19 +73,21 @@
                 <!-- Category Start -->
                 <div class="border-bottom mb-4 pb-4">
                     <h5 class="font-weight-semi-bold mb-4">Filter by category</h5>
-                    <form>
+                    <form name="category_form" method="post">
+                        {% csrf_token %}
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="category-all">
+                            <input type="checkbox" class="custom-control-input" checked id="category-all" name="category-all">
                             <label class="custom-control-label" for="category-all">All categories</label>
                             <span class="badge border font-weight-normal">{{products|length}}</span>
                         </div>
                         {% for category, count in categories_count.items %}
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="category-{{forloop.counter}}">
+                            <input type="checkbox" class="custom-control-input" id="category-{{forloop.counter}}" name="category-{{category}}">
                             <label class="custom-control-label" for="category-{{forloop.counter}}">{{category}}</label>
                             <span class="badge border font-weight-normal">{{count}}</span>
                         </div>
                         {% endfor %}
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
                 <!-- Category End -->
@@ -170,6 +172,25 @@
     </div>
     <!-- Shop End -->
     <script>
-        console.log("Shop!")
+        // category_form handler
+        let all_categories_inpt = document.querySelector("input[name='category-all']")
+        let categories_inpt_list = document.querySelectorAll("input[name^='category-']:not(input[name^='category-all'])")
+        console.log(all_categories_inpt)
+        console.log(categories_inpt_list)
+        all_categories_inpt.addEventListener('click', (event)=>{
+            console.log(event.target.checked)
+            if(event.target.checked){
+                for(item of categories_inpt_list){
+                    item.checked = false
+                    console.log(item)
+                }
+            }
+        })
+        for(item of categories_inpt_list){
+            item.addEventListener('click', (event)=>{
+                all_categories_inpt.checked = false
+            })
+        }
+        
     </script>
 {% endblock %}
