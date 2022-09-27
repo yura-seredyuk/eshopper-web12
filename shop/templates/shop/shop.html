@@ -20,6 +20,11 @@
         </div>
     </div>
     <!-- Page Header End -->
+    {% for category in categories %}
+    {% for key, value in category.name.items %}
+    {{key}} {{value}}
+    {% endfor %}
+    {% endfor %}
 
 
     <!-- Shop Start -->
@@ -70,15 +75,15 @@
                     <h5 class="font-weight-semi-bold mb-4">Filter by category</h5>
                     <form>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="color-all">
-                            <label class="custom-control-label" for="price-all">All categories</label>
-                            <span class="badge border font-weight-normal">1000</span>
+                            <input type="checkbox" class="custom-control-input" checked id="category-all">
+                            <label class="custom-control-label" for="category-all">All categories</label>
+                            <span class="badge border font-weight-normal">{{products|length}}</span>
                         </div>
-                        {% for category in categories %}
+                        {% for category, count in categories_count.items %}
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-1">
-                            <label class="custom-control-label" for="color-1">{{category.category_name}}</label>
-                            <span class="badge border font-weight-normal">150</span>
+                            <input type="checkbox" class="custom-control-input" id="category-{{forloop.counter}}">
+                            <label class="custom-control-label" for="category-{{forloop.counter}}">{{category}}</label>
+                            <span class="badge border font-weight-normal">{{count}}</span>
                         </div>
                         {% endfor %}
                     </form>
@@ -90,15 +95,15 @@
                     <h5 class="font-weight-semi-bold mb-4">Filter by country</h5>
                     <form>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="size-all">
-                            <label class="custom-control-label" for="size-all">All countries</label>
-                            <span class="badge border font-weight-normal">1000</span>
+                            <input type="checkbox" class="custom-control-input" checked id="country-all">
+                            <label class="custom-control-label" for="country-all">All countries</label>
+                            <span class="badge border font-weight-normal">{{products|length}}</span>
                         </div>
-                        {% for country in countries %}
+                        {% for country, count in countries_count.items %}
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-1">
-                            <label class="custom-control-label" for="size-1">{{country.country_name}}</label>
-                            <span class="badge border font-weight-normal">150</span>
+                            <input type="checkbox" class="custom-control-input" id="country-{{forloop.counter}}">
+                            <label class="custom-control-label" for="country-{{forloop.counter}}">{{country}}</label>
+                            <span class="badge border font-weight-normal">{{count}}</span>
                         </div>
                         {% endfor %}
                     </form>
@@ -164,4 +169,7 @@
         </div>
     </div>
     <!-- Shop End -->
+    <script>
+        console.log("Shop!")
+    </script>
 {% endblock %}

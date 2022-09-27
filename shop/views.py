@@ -13,15 +13,23 @@ def shop_page(request, category_slug=None):
     products = Product.objects.all()
     category = None
 
-    print(Product.objects.all().count())
+    categories_count = {}
+    countries_count = {}
+    for country in countries:
+        countries_count.update({country.country_name:Product.objects.filter(country=country.id).count()})
 
+    for category in categories:
+        categories_count.update({category.category_name:Product.objects.filter(product_category=category.id).count()})
+    print(categories_count)
     if category_slug:
         category = ProductCategory.objects.filter(slug=category_slug)[0]
         products = Product.objects.filter(product_category=category).distinct()
     return render(request, 'shop/shop.html', {'products':products,
-                                            'categories':categories,
-                                            'countries':countries,
-                                            'selected_category': category
+                                            # 'categories':categories,
+                                            # 'countries':countries,
+                                            'selected_category': category,
+                                            'countries_count': countries_count,
+                                            'categories_count': categories_count
                                             })
 
 
