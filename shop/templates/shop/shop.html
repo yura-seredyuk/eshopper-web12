@@ -76,13 +76,13 @@
                     <form name="category_form" method="post">
                         {% csrf_token %}
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="category-all" name="category-all">
+                            <input type="checkbox" class="custom-control-input" {% if selected_categories|length < 1 %}checked{% endif %} id="category-all" name="category-all">
                             <label class="custom-control-label" for="category-all">All categories</label>
                             <span class="badge border font-weight-normal">{{products|length}}</span>
                         </div>
                         {% for category, count in categories_count.items %}
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="category-{{forloop.counter}}" name="category-{{category}}">
+                            <input type="checkbox" class="custom-control-input" {% if category in selected_categories %}checked{% endif %} id="category-{{forloop.counter}}" name="category-{{category}}">
                             <label class="custom-control-label" for="category-{{forloop.counter}}">{{category}}</label>
                             <span class="badge border font-weight-normal">{{count}}</span>
                         </div>
@@ -95,19 +95,21 @@
                 <!-- Country Start -->
                 <div class="mb-5">
                     <h5 class="font-weight-semi-bold mb-4">Filter by country</h5>
-                    <form>
+                    <form name="country_form" method="post">
+                        {% csrf_token %}
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="country-all">
+                            <input type="checkbox" class="custom-control-input" {% if selected_countries|length < 1 %}checked{% endif %} id="country-all" name="country-all">
                             <label class="custom-control-label" for="country-all">All countries</label>
                             <span class="badge border font-weight-normal">{{products|length}}</span>
                         </div>
                         {% for country, count in countries_count.items %}
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="country-{{forloop.counter}}">
+                            <input type="checkbox" class="custom-control-input" {% if country in selected_countries %}checked{% endif %} id="country-{{forloop.counter}}"  name="country-{{country}}">
                             <label class="custom-control-label" for="country-{{forloop.counter}}">{{country}}</label>
                             <span class="badge border font-weight-normal">{{count}}</span>
                         </div>
                         {% endfor %}
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
                 <!-- Country End -->
@@ -192,5 +194,25 @@
             })
         }
         
+
+        let all_countries_inpt = document.querySelector("input[name='country-all']")
+        let countries_inpt_list = document.querySelectorAll("input[name^='country-']:not(input[name^='country-all'])")
+        console.log(all_countries_inpt)
+        console.log(countries_inpt_list)
+        all_countries_inpt.addEventListener('click', (event)=>{
+            console.log(event.target.checked)
+            if(event.target.checked){
+                for(item of countries_inpt_list){
+                    item.checked = false
+                    console.log(item)
+                }
+            }
+        })
+        for(item of countries_inpt_list){
+            item.addEventListener('click', (event)=>{
+                all_countries_inpt.checked = false
+            })
+        }
+
     </script>
 {% endblock %}

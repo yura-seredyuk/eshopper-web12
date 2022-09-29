@@ -66,6 +66,8 @@ WSGI_APPLICATION = 'eshopper.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+FILTER_SESSION_ID = 'filter'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
