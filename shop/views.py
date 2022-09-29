@@ -3,8 +3,6 @@ from .models import Product, ProductCategory, Country
 from django.conf import settings
 
 
-SESSION_DATA = {'selected_categories':[],'selected_countries':[]}
-
 def homepage(request):
     categories = ProductCategory.objects.all()
    
@@ -21,19 +19,25 @@ def shop_page(request, category_slug=None):
     countries_count = {}
     for country in countries:
         countries_count.update({country.country_name:Product.objects.filter(country=country.id).count()})
-    
+
+    min_price = min(list(map(lambda x: float(x.unit_price), products)))
+    max_price = max(list(map(lambda x: float(x.unit_price), products)))
+    price_step = (max_price - min_price) / 5
+    price_list = [f'${int(min_price + i * price_step)} - ${int(min_price + (i + 1) * price_step - 1)}'  if i != 4 else f'${int(min_price + i * price_step)} - ${int(min_price + (i + 1) * price_step)}' for i in range(5)]
+    print(price_list)
+    print(Product.objects.filter(unit_price__gte=40, unit_price__lte=50).distinct())
     selected_categories = []
     selected_countries = []
 
+    session = request.session.get(settings.FILTER_SESSION_ID)
+    if not session:
+        request.session[settings.FILTER_SESSION_ID] = {'selected_categories':[],
+                                                        'selected_countries':[],
+                                                        'selected_prices': []}
+        request.session.modified = True
+    session = request.session.get(settings.FILTER_SESSION_ID)
 
-    
     if request.method == 'POST':
-        session = request.session.get(settings.FILTER_SESSION_ID)
-        if not session:
-            request.session[settings.FILTER_SESSION_ID] = {'selected_categories':[],
-                                                                    'selected_countries':[]}
-            request.session.modified = True
-        session = request.session.get(settings.FILTER_SESSION_ID)
         for item in request.POST.keys():
             if 'category' in item:
                 if item == 'category-all': 
@@ -54,8 +58,7 @@ def shop_page(request, category_slug=None):
             request.session.modified = True
         else:
             selected_categories = request.session.get(settings.FILTER_SESSION_ID)['selected_categories']
-
-        
+    
         if 'all' in selected_countries:
             request.session[settings.FILTER_SESSION_ID]['selected_countries'] = selected_countries = []
             request.session.modified = True
@@ -70,8 +73,6 @@ def shop_page(request, category_slug=None):
 
 
     print(request.session.get(settings.FILTER_SESSION_ID))
-    print(1, selected_categories, selected_countries, category_slug)
-
     for category in categories:
         categories_count.update({category.category_name:Product.objects.filter(product_category=category.id).count()})
 
@@ -90,8 +91,6 @@ def shop_page(request, category_slug=None):
     if category_slug:
         selected_category = ProductCategory.objects.filter(slug=category_slug)[0]
         products = Product.objects.filter(product_category=selected_category).distinct()
-    print(2, selected_categories, selected_countries, category_slug)
-    print(request.path)
 
     return render(request, 'shop/shop.html', {'products':products,
                                             'categories':categories,
@@ -100,7 +99,8 @@ def shop_page(request, category_slug=None):
                                             'countries_count': countries_count,
                                             'categories_count': categories_count,
                                             'selected_categories': selected_categories,
-                                            'selected_countries': selected_countries
+                                            'selected_countries': selected_countries,
+                                            'price_list': price_list
                                             })
 
 def categories_filter(request):
