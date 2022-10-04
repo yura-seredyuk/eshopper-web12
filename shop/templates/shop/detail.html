@@ -64,7 +64,11 @@
                             </button>
                         </div>
                     </div>
-                    <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
+                    <form action="{% url 'cart:cart_add' product_id=product.pk %}" name="cart_add_form_{{product.pk}}" method="post">
+                        {% csrf_token %}
+                        {{cart_product_form}}
+                        <button onClick="document.cart_add_form_{{product.pk}}.submit()" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
+                    </form>
                 </div>
             </div>
         </div>

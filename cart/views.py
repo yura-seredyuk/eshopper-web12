@@ -27,4 +27,6 @@ def cart_clear(request):
 def shop_cart(request):
     cart_data = Cart(request)
     return render(request, 'cart/shop-cart.html',
-                            {'cart_data':cart_data})
+                            {'cart_data':cart_data,
+                            'total_price': cart_data.get_total_price(),
+                            'cart_quantity':cart_data.__len__()})

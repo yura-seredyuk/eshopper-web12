@@ -112,4 +112,5 @@ def product_detail_page(request, pk):
 
     product = get_object_or_404(Product, pk=pk)
     return render(request, 'shop/detail.html', {'product':product,
-                                            'categories':categories})
+                                            'categories':categories,
+                                            'cart_product_form': CartAddProductForm()})
