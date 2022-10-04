@@ -9583,3 +9583,9 @@ a.text-dark:hover, a.text-dark:focus {
     transform: translateY(-15px);
   }
 }
+
+
+
+form[name^="cart"]> select, form[name^="cart"]> label{
+  display: none;
+}

@@ -144,7 +144,11 @@
                             <div class="card-footer d-flex justify-content-between bg-light border">
                                 <a href="{% url 'shop:detail_page' pk=product.pk %}" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>Details</a>
                                 <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-heart text-primary  mr-1"></i>Like</a>
-                                <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Buy</a>
+                                <form action="{% url 'cart:cart_add' product_id=product.pk %}" name="cart_add_form_{{product.pk}}" method="post">
+                                    {% csrf_token %}
+                                    {{cart_product_form}}
+                                    <a onClick="document.cart_add_form_{{product.pk}}.submit()" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Buy</a>
+                                </form>
                             </div>
                         </div>
                     </div>
