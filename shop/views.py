@@ -71,7 +71,6 @@ def shop_page(request, category_slug=None):
         del request.session[settings.FILTER_SESSION_ID]
 
 
-
     print(request.session.get(settings.FILTER_SESSION_ID))
     for category in categories:
         categories_count.update({category.category_name:Product.objects.filter(product_category=category.id).count()})
