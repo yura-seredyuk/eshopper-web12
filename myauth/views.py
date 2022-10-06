@@ -25,4 +25,6 @@ def log_out(request):
     return redirect('shop:homepage')
 
 def signin(request):
+    if request.method == 'POST':
+        print(request.POST)
     return render(request, 'myauth/signin.html')
