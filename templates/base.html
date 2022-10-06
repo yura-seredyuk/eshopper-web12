@@ -24,6 +24,8 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    {% block css_styles %}
+    {% endblock %}
 </head>
 <body>
     {% include 'layouts/header.html' %}

@@ -3,6 +3,6 @@ from django.contrib.auth.models import User
 
 
 class UserLoginForm(forms.Form):
-    login = forms.CharField(required=True)
+    username = forms.CharField(required=True)
     password = forms.CharField(required=True, initial=False,
                                 widget=forms.PasswordInput)
