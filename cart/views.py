@@ -4,7 +4,8 @@ from shop.models import Product
 from .cart import Cart
 from .forms import CartAddProductForm
 from django.contrib.auth.models import User
-from shop.models import Address, Profile, City, Country, Customer
+from shop.models import Address, Profile, City, Country, Customer,\
+                        Order
 
 
 
@@ -36,17 +37,10 @@ def shop_cart(request):
 def cart_checkout(request):
     cart_data = Cart(request)
     user = request.user
-    print(user)
     profile = Profile.objects.filter(user=user).first()
-    print(profile)
-    customer = Customer.objects.filter(profile=profile).first()
-    print(customer)
     address = profile.address
-    print(address)
     city = address.city
-    print(city)
     country = Country.objects.filter(pk=city.country_id).first() 
-    print(country)
     billing_data = {
         "first_name": user.first_name,
         "last_name": user.last_name,
@@ -63,3 +57,25 @@ def cart_checkout(request):
                             'total_price': cart_data.get_total_price(),
                             'cart_quantity':cart_data.__len__(),
                             'billing_data': billing_data})
+
+
+def order(request):
+    cart_data = Cart(request)
+    user = request.user
+    profile = Profile.objects.filter(user=user).first()
+    address = profile.address
+    city = address.city
+    customer = Customer.objects.filter(profile=profile).first()
+
+    for item in cart_data:
+        print(item)
+        order_data = {
+            "customer": customer,
+            "city": city,
+            "product": item["product"],
+            "price": item["total_price"]
+        }
+        print(order_data)
+        order = Order.objects.create(**order_data)
+    cart_data.clear()
+    return redirect("shop:homepage") 

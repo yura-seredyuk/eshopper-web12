@@ -1,3 +1,5 @@
+from email.policy import default
+from importlib.metadata import requires
 import uuid
 from django.db import models
 from django.contrib.auth.models import User, Group
@@ -127,7 +129,7 @@ class Product(models.Model):
 
 
 class Order(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.DO_NOTHING)
+    employee = models.ForeignKey(Employee, on_delete=models.DO_NOTHING, null=True, default=None, blank=True)
     customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
     city = models.ForeignKey(City, on_delete=models.DO_NOTHING)
     date_of_order = models.DateTimeField(default=timezone.now)
