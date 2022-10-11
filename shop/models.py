@@ -81,7 +81,7 @@ class Customer(models.Model):
         verbose_name_plural = "Customers"
 
     def __str__(self) -> str:
-        return f"{self.profile}"
+        return f"Customer: {self.profile}"
 
 
 class Manager(models.Model):

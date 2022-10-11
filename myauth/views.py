@@ -34,9 +34,12 @@ def signin(request):
         if user is None:
             user_data = {"username": request.POST["username"],
                 "password": request.POST["password"],
-                "email": request.POST["email"]}
+                "email": request.POST["email"],
+                "first_name": request.POST["first_name"],
+                "last_name": request.POST["last_name"]}
             user = User.objects.create_user(**user_data)
             city = City.objects.filter(city_name=request.POST["city"]).first()
+            country = None
             if city is None:
                 country = Country.objects.filter(country_name=request.POST["country"]).first()
                 if country is None:
