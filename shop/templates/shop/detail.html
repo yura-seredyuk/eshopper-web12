@@ -49,22 +49,22 @@
                 </div>
                 <h3 class="font-weight-semi-bold mb-4">${{product.unit_price}} {% if product.old_price > 0 %}<del class="text-muted h5">${{product.old_price}}</del>{% endif %}</h3>
                 <p class="mb-4">{{product.details}}</p>
-                
+                {{cart.cart}}
                 <div class="d-flex align-items-center mb-4 pt-2">
+                    <form action="{% url 'cart:cart_add' product_id=product.pk %}" name="cart_add_form_{{product.pk}}" method="post">
                     <div class="input-group quantity mr-3" style="width: 130px;">
                         <div class="input-group-btn">
                             <button class="btn btn-primary btn-minus" >
                             <i class="fa fa-minus"></i>
                             </button>
                         </div>
-                        <input type="text" class="form-control bg-secondary text-center" value="1">
+                        <input type="text" class="form-control bg-secondary text-center" value="{% if product.pk in cart.cart %}999{% else %}1{% endif %}" name="quantity_f" id="quantity_f">
                         <div class="input-group-btn">
                             <button class="btn btn-primary btn-plus">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>
                     </div>
-                    <form action="{% url 'cart:cart_add' product_id=product.pk %}" name="cart_add_form_{{product.pk}}" method="post">
                         {% csrf_token %}
                         {{cart_product_form}}
                         <button onClick="document.cart_add_form_{{product.pk}}.submit()" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>

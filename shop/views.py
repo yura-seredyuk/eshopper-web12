@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import Product, ProductCategory, Country
 from django.conf import settings
 from cart.forms import CartAddProductForm
+from cart.cart import Cart
 
 
 def homepage(request):
@@ -109,8 +110,9 @@ def categories_filter(request):
 
 def product_detail_page(request, pk):
     categories = ProductCategory.objects.all()
-
+    cart = Cart(request)
     product = get_object_or_404(Product, pk=pk)
     return render(request, 'shop/detail.html', {'product':product,
                                             'categories':categories,
-                                            'cart_product_form': CartAddProductForm()})
+                                            'cart_product_form': CartAddProductForm(),
+                                            'cart': cart})
