@@ -74,7 +74,7 @@
                         </div>
                         <div class="navbar-nav ml-auto py-0">
                             {% if user.is_authenticated %}
-                            <p class="nav-item nav-link">Hello <u>{{user.username}}</u>!</p>
+                            <a href="{% url 'profile:profile' %}" class="nav-item nav-link">Hello <u>{{user.username}}</u>!</a>
                             <a href="{% url 'myauth:logout' %}" class="nav-item nav-link">Logout</a>
                             {% else %}
                             <a href="{% url 'myauth:login' %}" class="nav-item nav-link">Login</a>
