@@ -127,7 +127,12 @@ class Product(models.Model):
     def __str__(self) -> str:
         return f"{self.product_name} {self.unit_price} {self.product_category}"
 
-
+STATUS_CHOICES = (
+    ('opened','Opened'),
+    ('in_progress', 'In progress'),
+    ('sended','Sended'),
+    ('closed','Closed'),
+)
 class Order(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.DO_NOTHING, null=True, default=None, blank=True)
     customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
@@ -135,6 +140,8 @@ class Order(models.Model):
     date_of_order = models.DateTimeField(default=timezone.now)
     product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
     price = models.DecimalField(max_digits=10, decimal_places=1)
+    quantity = models.IntegerField(default=1)
+    status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='opened')
 
     class Meta:
         verbose_name = "Order"

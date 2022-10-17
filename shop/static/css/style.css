@@ -4685,7 +4685,7 @@ a.badge-primary:focus, a.badge-primary.focus {
   box-shadow: 0 0 0 0.2rem rgba(209, 156, 151, 0.5);
 }
 
-.badge-secondary {
+.badge-secondary, .status_closed {
   color: #212529;
   background-color: #EDF1FF;
 }
@@ -4700,7 +4700,7 @@ a.badge-secondary:focus, a.badge-secondary.focus {
   box-shadow: 0 0 0 0.2rem rgba(237, 241, 255, 0.5);
 }
 
-.badge-success {
+.badge-success, .status_sended {
   color: #fff;
   background-color: #28a745;
 }
@@ -4715,7 +4715,7 @@ a.badge-success:focus, a.badge-success.focus {
   box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
 }
 
-.badge-info {
+.badge-info, .status_in_progress {
   color: #fff;
   background-color: #17a2b8;
 }
@@ -4730,7 +4730,7 @@ a.badge-info:focus, a.badge-info.focus {
   box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.5);
 }
 
-.badge-warning {
+.badge-warning, .status_opened {
   color: #212529;
   background-color: #ffc107;
 }
