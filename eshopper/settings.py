@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'shop',
     'cart',
     'myauth',
+    'user_profile',
 ]
 
 MIDDLEWARE = [
