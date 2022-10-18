@@ -233,58 +233,153 @@
                 });
         });
         // EDIT ORDER
-        $('.mdi-cart-arrow-down').click(function(){
-            let target_row = this.closest( "tr"),
-                quantity_cell = target_row.querySelector("td[data-name='quantity']"),
-                price_cell = target_row.querySelector("td[data-name='price']"),
-                actions_cell = target_row.querySelector("td[data-name='actions']"),
-                old_quantity = parseInt(quantity_cell.textContent),
-                old_price = parseFloat(price_cell.textContent.replace("$","")),
-                unit_price = old_price / old_quantity
-            actions_cell.innerHTML = `<button class="btn btn-success"><i class="mdi mdi-cart-plus mr-1" data-toggle="tooltip" data-placement="top" title="Change order"></i></button>
-            <button class="btn btn-danger"><i class="mdi mdi-cart-minus mr-1" data-toggle="tooltip" data-placement="top" title="Cancel edit"></i></button>`
-            quantity_cell.innerHTML = `<input type="number" name="quantity" id="quantity" value="${old_quantity}" min="1", max="10">`
-            quantity_cell.querySelector('input').addEventListener('change',(e)=>{
-                price_cell.textContent = '$'+(parseInt(e.target.value)*unit_price).toFixed(1)
-            })
-            console.log(old_quantity, old_price)
-            // $.ajax({
-            //         type: "POST",
-            //         url: "{% url 'profile:remove_order' %}",
-            //         data: {'orderid': $(this).attr('data-orderid'),'userid':'{{user.pk}}','csrfmiddlewaretoken': '{{ csrf_token }}'},
-            //         dataType: "json",
-            //         success: function(response) {
-            //         console.log(response)
-            //         let target_table = document.querySelector("#orders table tbody")
-            //         target_table.innerHTML = ''
-            //         let counter = 1
-            //         for(order of response){
-            //             let buttons = ''
-            //             if(order["status"]=='opened'){
-            //                 buttons+= `<button><i class="mdi mdi-cart-arrow-down mr-1" data-toggle="tooltip" data-placement="top" title="Edit order"></i></button> `
-            //             } 
-            //             if(order["status"]=='opened' || order["status"]=='closed'){
-            //                 buttons+= `<button><i class="mdi mdi-cart-remove mr-1" data-toggle="tooltip" data-placement="top" title="Remove order" data-orderid="${order['pk']}"></i></button>`
-            //             }
-            //             let order_row = `<tr>
-            //                             <td>${counter}</td>
-            //                             <td>${order["product"]}</td>
-            //                             <td>${order["date_of_order"]}</td>
-            //                             <td>${order["quantity"]}</td>
-            //                             <td>$${order["price"]}</td>
-            //                             <td><span class="badge status_${order["status"]}">${order["status"]}</span></td>
-            //                             <td>
-            //                                 ${buttons}
-            //                             </td>
-            //                         </tr>`
-            //             counter++
-            //             console.log(order_row)
-            //             target_table.insertAdjacentHTML('beforeend',order_row)
-            //         }
+        let edit_buttons = document.querySelectorAll('button i.mdi-cart-arrow-down')
+        let remove_buttons = document.querySelectorAll('button i.mdi-cart-remove')
+        let change_buttons = document.querySelectorAll('button i.mdi-cart-plus')
+        let cancel_buttons = document.querySelectorAll('button i.mdi-cart-minus')
 
-            //         }
-            //     });
-        });
+        button_handler()
+
+        function buttons_updater(edit_buttons,remove_buttons,change_buttons,cancel_buttons){
+            edit_buttons = document.querySelectorAll('button i.mdi-cart-arrow-down')
+            remove_buttons = document.querySelectorAll('button i.mdi-cart-remove')
+            change_buttons = document.querySelectorAll('button i.mdi-cart-plus')
+            cancel_buttons = document.querySelectorAll('button i.mdi-cart-minus')
+        }
+
+        function button_handler(){
+            // if(action == 'edit'){
+            //     order_edit(edit_buttons)
+            // } else if(action == 'remove'){
+            //     order_remove(remove_buttons)
+            // } else if(action == 'change'){
+            //     order_change(change_buttons)
+            // } else if(action == 'cancel'){
+            //     cancel_edit(cancel_buttons)
+            // }
+            order_edit(edit_buttons)
+            // order_remove(remove_buttons)
+            order_change(change_buttons)
+            cancel_edit(cancel_buttons)
+            buttons_updater(edit_buttons,remove_buttons,change_buttons,cancel_buttons)
+        }
+        function order_edit(buttons){
+            for(button of buttons){
+                button.addEventListener('click', function(e){
+                    console.log(this)
+                    let target_row = this.closest( "tr"),
+                        quantity_cell = target_row.querySelector("td[data-name='quantity']"),
+                        price_cell = target_row.querySelector("td[data-name='price']"),
+                        actions_cell = target_row.querySelector("td[data-name='actions']"),
+                        old_quantity = parseInt(quantity_cell.textContent),
+                        old_price = parseFloat(price_cell.textContent.replace("$","")),
+                        unit_price = old_price / old_quantity,
+                        orderid = actions_cell.querySelector('button i.mdi-cart-remove').dataset.orderid
+                    
+                    actions_cell.innerHTML += `<button class="btn btn-success"><i class="mdi mdi-cart-plus mr-1" data-toggle="tooltip" data-placement="top" title="Change order"></i></button>
+                    <button class="btn btn-danger"><i class="mdi mdi-cart-minus mr-1" data-toggle="tooltip" data-placement="top" title="Cancel edit"></i></button>`
+                    
+                    
+                    quantity_cell.innerHTML = `<input type="number" name="quantity" id="quantity" value="${old_quantity}" min="1", max="10">`
+                    
+                    // quantity_cell.querySelector('input').addEventListener('change',(e)=>{
+                    //     price_cell.textContent = '$'+(parseInt(e.target.value)*unit_price).toFixed(1)
+                    // });
+
+                    // actions_cell.querySelector('.mdi-cart-minus').addEventListener('click',(e)=>{
+                    //     price_cell.textContent = '$'+old_price
+                    //     quantity_cell.textContent = old_quantity
+                    //     // actions_cell.innerHTML = `<button class="btn btn-warning"><i class="mdi mdi-cart-arrow-down mr-1" data-toggle="tooltip" data-placement="top" title="Edit order"></i></button> `+
+                    //     //                          `<button class="btn btn-danger"><i class="mdi mdi-cart-remove mr-1" data-toggle="tooltip" data-placement="top" title="Remove order" data-orderid="${orderid}"></i></button>`
+                    // });
+                    button_handler()
+                    console.log(old_quantity, old_price)
+                })
+            }
+        }
+        function order_change(buttons){
+            for(button of buttons){
+                button.addEventListener('click', function(e){
+                    console.log(this)
+                    let target_row = this.closest( "tr"),
+                        quantity_cell = target_row.querySelector("td[data-name='quantity']"),
+                        price_cell = target_row.querySelector("td[data-name='price']"),
+                        actions_cell = target_row.querySelector("td[data-name='actions']"),
+                        old_quantity = parseInt(quantity_cell.textContent),
+                        old_price = parseFloat(price_cell.textContent.replace("$",""))
+
+                    price_cell.textContent = '$'+old_price
+                    quantity_cell.textContent = old_quantity
+                    button_handler()
+            })
+        }}
+        function cancel_edit(buttons){}
+        // $('.mdi-cart-arrow-down').click(function(){
+        //     console.log(this)
+        //     let target_row = this.closest( "tr"),
+        //         quantity_cell = target_row.querySelector("td[data-name='quantity']"),
+        //         price_cell = target_row.querySelector("td[data-name='price']"),
+        //         actions_cell = target_row.querySelector("td[data-name='actions']"),
+        //         old_quantity = parseInt(quantity_cell.textContent),
+        //         old_price = parseFloat(price_cell.textContent.replace("$","")),
+        //         unit_price = old_price / old_quantity,
+        //         orderid = actions_cell.querySelector('button i.mdi-cart-remove').dataset.orderid
+            
+        //     actions_cell.innerHTML += `<button class="btn btn-success"><i class="mdi mdi-cart-plus mr-1" data-toggle="tooltip" data-placement="top" title="Change order"></i></button>
+        //     <button class="btn btn-danger"><i class="mdi mdi-cart-minus mr-1" data-toggle="tooltip" data-placement="top" title="Cancel edit"></i></button>`
+            
+            
+        //     quantity_cell.innerHTML = `<input type="number" name="quantity" id="quantity" value="${old_quantity}" min="1", max="10">`
+            
+        //     // quantity_cell.querySelector('input').addEventListener('change',(e)=>{
+        //     //     price_cell.textContent = '$'+(parseInt(e.target.value)*unit_price).toFixed(1)
+        //     // });
+
+        //     // actions_cell.querySelector('.mdi-cart-minus').addEventListener('click',(e)=>{
+        //     //     price_cell.textContent = '$'+old_price
+        //     //     quantity_cell.textContent = old_quantity
+        //     //     // actions_cell.innerHTML = `<button class="btn btn-warning"><i class="mdi mdi-cart-arrow-down mr-1" data-toggle="tooltip" data-placement="top" title="Edit order"></i></button> `+
+        //     //     //                          `<button class="btn btn-danger"><i class="mdi mdi-cart-remove mr-1" data-toggle="tooltip" data-placement="top" title="Remove order" data-orderid="${orderid}"></i></button>`
+        //     // });
+
+        //     console.log(old_quantity, old_price)
+        //     // $.ajax({
+        //     //         type: "POST",
+        //     //         url: "{% url 'profile:remove_order' %}",
+        //     //         data: {'orderid': $(this).attr('data-orderid'),'userid':'{{user.pk}}','csrfmiddlewaretoken': '{{ csrf_token }}'},
+        //     //         dataType: "json",
+        //     //         success: function(response) {
+        //     //         console.log(response)
+        //     //         let target_table = document.querySelector("#orders table tbody")
+        //     //         target_table.innerHTML = ''
+        //     //         let counter = 1
+        //     //         for(order of response){
+        //     //             let buttons = ''
+        //     //             if(order["status"]=='opened'){
+        //     //                 buttons+= `<button><i class="mdi mdi-cart-arrow-down mr-1" data-toggle="tooltip" data-placement="top" title="Edit order"></i></button> `
+        //     //             } 
+        //     //             if(order["status"]=='opened' || order["status"]=='closed'){
+        //     //                 buttons+= `<button><i class="mdi mdi-cart-remove mr-1" data-toggle="tooltip" data-placement="top" title="Remove order" data-orderid="${order['pk']}"></i></button>`
+        //     //             }
+        //     //             let order_row = `<tr>
+        //     //                             <td>${counter}</td>
+        //     //                             <td>${order["product"]}</td>
+        //     //                             <td>${order["date_of_order"]}</td>
+        //     //                             <td>${order["quantity"]}</td>
+        //     //                             <td>$${order["price"]}</td>
+        //     //                             <td><span class="badge status_${order["status"]}">${order["status"]}</span></td>
+        //     //                             <td>
+        //     //                                 ${buttons}
+        //     //                             </td>
+        //     //                         </tr>`
+        //     //             counter++
+        //     //             console.log(order_row)
+        //     //             target_table.insertAdjacentHTML('beforeend',order_row)
+        //     //         }
+
+        //     //         }
+        //     //     });
+        // });
 
     </script>
     {% endblock %}
