@@ -147,5 +147,15 @@ class Order(models.Model):
         verbose_name = "Order"
         verbose_name_plural = "Orders"
 
+    def obj_to_dict(self):
+        return {
+            "pk": self.pk,
+            "date_of_order": self.date_of_order.strftime("%Y-%m-%d"),
+            "product": self.product.product_name,
+            "price": float(self.price),
+            "quantity": self.quantity,
+            "status": self.status
+        }
+
     def __str__(self) -> str:
         return f"{self.customer} {self.city} {self.date_of_order} {self.product} {self.price}"

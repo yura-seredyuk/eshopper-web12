@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, Group
 from shop.models import Profile, Country, Order, Customer
 from datetime import datetime
+from django.http import HttpResponse
+import json
 
 
 def profile(request):
@@ -21,7 +23,7 @@ def profile(request):
         country = Country.objects.filter(pk=city.country.id).first()
         date_of_birth = profile.date_of_birth.strftime("%Y-%m-%d")
         customer = Customer.objects.filter(profile=profile).first()
-        orders = Order.objects.filter(customer=customer).all()
+        orders = Order.objects.filter(customer=customer).order_by("-date_of_order").all()
     return render(request, 'user_profile/profile.html', {"user":user,
                                                         "address":address,
                                                         "city":city,
@@ -29,4 +31,16 @@ def profile(request):
                                                         "country":country,
                                                         "date_of_birth":date_of_birth,
                                                         "orders":orders})
+
+
+def remove_order_button(request):
+    print(request.POST)
+    userid = int(request.POST["userid"][0])
+    user = User.objects.filter(pk=userid).first()
+    profile = Profile.objects.filter(user=user).first()
+    customer = Customer.objects.filter(profile=profile).first()
+    orders = Order.objects.filter(customer=customer).order_by("-date_of_order").all()
+    orders = [item.obj_to_dict() for item in orders]
+    return HttpResponse(json.dumps(orders), content_type='application/json')
+
 
