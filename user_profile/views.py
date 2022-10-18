@@ -24,6 +24,7 @@ def profile(request):
         date_of_birth = profile.date_of_birth.strftime("%Y-%m-%d")
         customer = Customer.objects.filter(profile=profile).first()
         orders = Order.objects.filter(customer=customer).order_by("-date_of_order").all()
+        orders = [item.obj_to_dict() for item in orders]
     return render(request, 'user_profile/profile.html', {"user":user,
                                                         "address":address,
                                                         "city":city,
@@ -39,6 +40,7 @@ def remove_order_button(request):
     user = User.objects.filter(pk=userid).first()
     profile = Profile.objects.filter(user=user).first()
     customer = Customer.objects.filter(profile=profile).first()
+    Order.objects.filter(pk=int(request.POST["orderid"][0])).first().delete()
     orders = Order.objects.filter(customer=customer).order_by("-date_of_order").all()
     orders = [item.obj_to_dict() for item in orders]
     return HttpResponse(json.dumps(orders), content_type='application/json')
