@@ -55,4 +55,12 @@ def order_change_button(request):
     return HttpResponse(json.dumps({"status":"success"}), content_type='application/json')
 
 
+def edit_profile(request):
+    print(request.POST)
+    userid = int(request.POST["userid"][0])
+    user = User.objects.filter(pk=userid).first()
+    profile = Profile.objects.filter(user=user).first()
+    
+    return HttpResponse(json.dumps({"status":"success"}), content_type='application/json')
+
 
