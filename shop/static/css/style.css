@@ -9590,3 +9590,16 @@ a.text-dark:hover, a.text-dark:focus {
 form[name^="cart"]> select, form[name^="cart"]> label{
   display: none;
 }
+
+.btn.activebtn{
+  padding: 0;
+  height: 38px;
+  width: 45px;
+}
+.btn.activebtn i.mdi{
+  display: block;
+  margin: 0 !important;
+  height: 38px;
+  width: 45px;
+  padding: 6px 5px 0 0;
+}

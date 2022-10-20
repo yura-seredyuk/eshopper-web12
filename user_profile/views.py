@@ -14,7 +14,6 @@ def profile(request):
     country = ''
     date_of_birth = ''
     orders = []
-
     user = request.user
     if user.is_active:
         profile = Profile.objects.filter(user=user).first()
@@ -40,9 +39,20 @@ def remove_order_button(request):
     user = User.objects.filter(pk=userid).first()
     profile = Profile.objects.filter(user=user).first()
     customer = Customer.objects.filter(profile=profile).first()
-    Order.objects.filter(pk=int(request.POST["orderid"][0])).first().delete()
+    print(request.POST["orderid"])
+    Order.objects.filter(pk=int(request.POST["orderid"])).first().delete()
     orders = Order.objects.filter(customer=customer).order_by("-date_of_order").all()
     orders = [item.obj_to_dict() for item in orders]
     return HttpResponse(json.dumps(orders), content_type='application/json')
+
+
+def order_change_button(request):
+    print(request.POST)
+    order = Order.objects.filter(pk=int(request.POST["orderid"])).first()
+    order.quantity = int(request.POST["quantity"])
+    order.price = float(request.POST["price"])
+    order.save()
+    return HttpResponse(json.dumps({"status":"success"}), content_type='application/json')
+
 
 
