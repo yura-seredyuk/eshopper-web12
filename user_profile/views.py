@@ -87,3 +87,34 @@ def edit_profile(request):
     return HttpResponse(json.dumps({"status":"success"}), content_type='application/json')
 
 
+def order_status_edit(request):
+    print(request.POST)
+    order = Order.objects.filter(pk=int(request.POST["orderid"])).first()
+    if order.employee is None:
+        userid = int(request.POST["userid"][0])
+        user = User.objects.filter(pk=userid).first()
+        profile = Profile.objects.filter(user=user).first()
+        employee = Employee.objects.filter(profile=profile).first()
+        order.employee = employee
+    order.status = request.POST["status"]
+    order.save()
+    return HttpResponse(json.dumps({"status":"success"}), content_type='application/json')
+
+
+def get_customer(request):
+    order = Order.objects.filter(pk=int(request.POST["orderid"])).first()
+    profile = order.customer.profile
+    user = profile.user
+    customer_data = {
+        "email": user.email,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        'city_name': profile.address.city.city_name,
+        'country': profile.address.city.country.country_name,
+        'street': profile.address.street,
+        'appartaments': profile.address.appartaments,
+        'zip_code': profile.address.zip_code,
+        'phone': profile.phone,
+    }
+    return HttpResponse(json.dumps(customer_data), content_type='application/json')
+

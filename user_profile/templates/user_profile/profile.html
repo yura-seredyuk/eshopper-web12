@@ -46,6 +46,9 @@
                             <table class="table table-borderless mb-0">
                                 <thead class="thead-light">
                                     <tr>
+                                        {% if group == 'employee' %}
+                                        <th></th>
+                                        {% endif %}
                                         <th>#</th>
                                         <th>Product Name</th>
                                         <th>Order Date</th>
@@ -58,16 +61,19 @@
                                 <tbody>
                                     {% for order in orders %}
                                     <tr>
+                                        {% if group == 'employee' %}
+                                        <td><button class="customer_data" data-orderid="{{order.pk}}">+</button></td>
+                                        {% endif %}
                                         <td>{{forloop.counter}}</td>
                                         <td>{{order.product}}</td>
                                         <td>{{order.date_of_order}}</td>
                                         <td data-name="quantity" data-quantity="{{order.quantity}}">{{order.quantity}}</td>
                                         <td data-name="price" data-price="${{order.price}}">${{order.price}}</td>
-                                        <td>
+                                        <td data-name="status">
                                         {% if group == 'customer' %}     
                                             <span class="badge status_{{order.status}}">{{order.status}}</span>
                                         {% elif group == 'employee' %}
-                                            <select name="status" id="status" class="badge status_{{order.status}}" >
+                                            <select name="status" class="status badge status_{{order.status}}" >
                                                 <option value="opened" {% if order.status == "opened" %}selected{% endif %}>Opened</option>
                                                 <option value="in_progress" {% if order.status == "in_progress" %}selected{% endif %}>In progress</option>
                                                 <option value="sended" {% if order.status == "sended" %}selected{% endif %}>Sended</option>
@@ -90,6 +96,8 @@
                                         {% endif %}
                                         </td>
                                     </tr>
+                                    {% if group == 'employee' %}
+                                    {% endif %}
                                     {% endfor %}
                                 </tbody>
                             </table>
@@ -207,9 +215,7 @@
             let target_table = document.querySelector("#orders table tbody")
             function button_handler(){
                 target_table.addEventListener('click', (e)=>{
-                    
                     let target_row = e.target.parentElement.closest('tr')
-                    console.log(e.target.classList)
                     if(e.target.classList.contains('mdi-cart-arrow-down')){
                         console.log(e.target, 'EDIT')
                         order_edit(target_row, e.target)
@@ -222,6 +228,9 @@
                     }else if(e.target.classList.contains('mdi-cart-minus')){
                         console.log(e.target, 'CLOSE')
                         cancel_edit(target_row, e.target)
+                    } else if(e.target.classList.contains('mdi-cart-arrow-right')){
+                        console.log(e.target, 'EDIT STATUS')
+                        status_edit(target_row, e.target)
                     }
                 })
             }
@@ -324,6 +333,23 @@
             quantity_cell.textContent = quantity
         }
 
+        function status_edit(target_row, target_button){
+            
+            let status_select = target_row.querySelector("td[data-name='status'] select"),
+                actions_cell = target_row.querySelector("td[data-name='actions']"),
+                orderid = actions_cell.querySelector('button i.mdi-cart-arrow-right').dataset.orderid
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'profile:order_status_edit' %}",
+                data: {'orderid': orderid,'status': status_select.value ,'userid':'{{user.pk}}','csrfmiddlewaretoken': '{{ csrf_token }}'},
+                dataType: "json",
+                success: function(response) {
+                    console.log(response)
+                }
+            });
+        }
+
         $('#edit_profile').on('click', function(e){
             let firstname = document.querySelector('#firstname').value,
                 lastname = document.querySelector('#lastname').value,
@@ -350,5 +376,42 @@
                 }
             });
         });
+        
+        $('.status').on('change', function(e){
+            this.classList.value = `status badge status_` + this.value
+        })
+
+        $('.customer_data').on('click', function(e){
+            console.log(this, this.dataset.orderid)
+            let target_row = this.parentElement.closest('tr')
+            console.log(target_row)
+            $.ajax({
+                type: "POST",
+                url: "{% url 'profile:get_customer' %}",
+                data: {'orderid': this.dataset.orderid,'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                dataType: "json",
+                success: function(response) {
+                    console.log(response)
+                    let new_row = `<tr class="customer"><td colspan=8><table>
+                                                <tr>
+                                                    <th>Personal info:</th>
+                                                    <td>${response["first_name"]} ${response["last_name"]}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Contact info:</th>
+                                                    <th>phone:</th>
+                                                    <td>${response["phone"]}</td>
+                                                    <th>email:</th>
+                                                    <td>${response["email"]}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Address:</th>
+                                                    <td>${response["street"]}/${response["appartaments"]} ${response["city_name"]} ${response["zip_code"]} ${response["country"]}</td>
+                                                </tr>
+                                            </table></td></tr>`
+                    target_row.insertAdjacentHTML('afterend',new_row)
+                }
+            });
+        })
     </script>
     {% endblock %}
