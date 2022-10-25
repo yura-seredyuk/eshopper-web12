@@ -1,6 +1,7 @@
+from tokenize import group
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, Group
-from shop.models import Profile, Country, Order, Customer
+from shop.models import Profile, Country, Order, Customer, Employee
 from datetime import datetime
 from django.http import HttpResponse
 import json
@@ -15,18 +16,27 @@ def profile(request):
     date_of_birth = ''
     orders = []
     user = request.user
+    group = list(user.groups.values_list('name',flat = True))[0]
     if user.is_active:
         profile = Profile.objects.filter(user=user).first()
         address = profile.address
         city = address.city
         country = Country.objects.filter(pk=city.country.id).first()
         date_of_birth = profile.date_of_birth.strftime("%Y-%m-%d")
-        customer = Customer.objects.filter(profile=profile).first()
-        orders = Order.objects.filter(customer=customer).order_by("-date_of_order").all()
-        orders = [item.obj_to_dict() for item in orders]
+        if group == "customer":
+            customer = Customer.objects.filter(profile=profile).first()
+            orders = Order.objects.filter(customer=customer).order_by("-date_of_order").all()
+            orders = [item.obj_to_dict() for item in orders]
+        elif group == "employee":
+            employee = Employee.objects.filter(profile=profile).first()
+            employee_orders = Order.objects.filter(employee=employee).order_by("-date_of_order").all()
+            opened_orders = Order.objects.filter(status='opened').order_by("-date_of_order").all()
+            orders = [item.obj_to_dict() for item in opened_orders] + [item.obj_to_dict() for item in employee_orders]
+
     else:
         return redirect('myauth:login')
     return render(request, 'user_profile/profile.html', {"user":user,
+                                                        "group":group,
                                                         "address":address,
                                                         "city":city,
                                                         "profile":profile,
@@ -70,7 +80,7 @@ def edit_profile(request):
     
     if request.POST["zip_code"]:
         profile.address.zip_code = request.POST["zip_code"]
-        
+
     profile.address.save()
     profile.save()
     user.save()

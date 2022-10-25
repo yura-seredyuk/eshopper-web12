@@ -63,8 +63,20 @@
                                         <td>{{order.date_of_order}}</td>
                                         <td data-name="quantity" data-quantity="{{order.quantity}}">{{order.quantity}}</td>
                                         <td data-name="price" data-price="${{order.price}}">${{order.price}}</td>
-                                        <td><span class="badge status_{{order.status}}">{{order.status}}</span></td>
+                                        <td>
+                                        {% if group == 'customer' %}     
+                                            <span class="badge status_{{order.status}}">{{order.status}}</span>
+                                        {% elif group == 'employee' %}
+                                            <select name="status" id="status" class="badge status_{{order.status}}" >
+                                                <option value="opened" {% if order.status == "opened" %}selected{% endif %}>Opened</option>
+                                                <option value="in_progress" {% if order.status == "in_progress" %}selected{% endif %}>In progress</option>
+                                                <option value="sended" {% if order.status == "sended" %}selected{% endif %}>Sended</option>
+                                                <option value="closed" {% if order.status == "closed" %}selected{% endif %}>Closed</option>
+                                            </select>
+                                        {% endif %}
+                                        </td>
                                         <td data-name="actions">
+                                        {% if group == 'customer' %}    
                                             {% if order.status == 'opened' %}
                                             <button class="btn btn-warning activebtn"><i class="mdi mdi-cart-arrow-down mr-1" data-toggle="tooltip" data-placement="top" title="Edit order"></i></button>
                                             <button class="btn btn-success" style="display: none;"><i class="mdi mdi-cart-plus mr-1" data-toggle="tooltip" data-placement="top" title="Change order"></i></button>
@@ -73,6 +85,9 @@
                                             {% if order.status == 'opened' or order.status == 'closed' %}
                                             <button class="btn btn-danger activebtn"><i class="mdi mdi-cart-remove mr-1" data-toggle="tooltip" data-placement="top" title="Remove order" data-orderid="{{order.pk}}"></i></button>
                                             {% endif %}
+                                        {% elif group == 'employee' %}
+                                            <button class="btn btn-success activebtn"><i class="mdi mdi-cart-arrow-right mr-1" data-toggle="tooltip" data-placement="top" title="Edit status" data-orderid="{{order.pk}}"></i></button>
+                                        {% endif %}
                                         </td>
                                     </tr>
                                     {% endfor %}
