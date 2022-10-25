@@ -24,6 +24,8 @@ def profile(request):
         customer = Customer.objects.filter(profile=profile).first()
         orders = Order.objects.filter(customer=customer).order_by("-date_of_order").all()
         orders = [item.obj_to_dict() for item in orders]
+    else:
+        return redirect('myauth:login')
     return render(request, 'user_profile/profile.html', {"user":user,
                                                         "address":address,
                                                         "city":city,
@@ -59,8 +61,19 @@ def edit_profile(request):
     print(request.POST)
     userid = int(request.POST["userid"][0])
     user = User.objects.filter(pk=userid).first()
+    if request.POST["firstname"]:
+        user.first_name = request.POST["firstname"]
+    if request.POST["password"]:
+        user.set_password(request.POST["password"])
+
     profile = Profile.objects.filter(user=user).first()
     
+    if request.POST["zip_code"]:
+        profile.address.zip_code = request.POST["zip_code"]
+        
+    profile.address.save()
+    profile.save()
+    user.save()
     return HttpResponse(json.dumps({"status":"success"}), content_type='application/json')
 
 

@@ -84,8 +84,8 @@
                     <!-- end orders content-->
 
                     <div class="tab-pane" id="settings">
-                            <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-account-circle mr-1"></i> Personal Info</h5>
-                            
+                        <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-account-circle mr-1"></i> Personal Info</h5>
+                        <form autocomplete="off">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -125,7 +125,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="userpassword">Password</label>
-                                        <input type="password" class="form-control" id="userpassword" placeholder="Enter password">
+                                        <input type="password" class="form-control" id="userpassword" placeholder="Enter password" autocomplete="new-password">
                                         <span class="form-text text-muted"><small>If you want to change password please enter new password and save changes.</small></span>
                                     </div>
                                 </div> <!-- end col -->
@@ -147,7 +147,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label for="zipcode">Appartemants</label>
+                                        <label for="zipcode">Zip code</label>
                                         <input type="text" class="form-control" id="zipcode" placeholder="Enter zip code" value="{{address.zip_code}}">
                                     </div>
                                 </div> <!-- end col -->
@@ -170,6 +170,7 @@
                             <div class="text-right">
                                 <button class="btn btn-success waves-effect waves-light mt-2" id="edit_profile"><i class="mdi mdi-content-save"></i> Save</button>
                             </div>
+                        </form>
                     </div>
                     <!-- end settings content-->
 
@@ -185,6 +186,7 @@
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         });
+        document.querySelector('#userpassword').value = ''
         // AJAX CALL
         $(document).ready(function(){
             let target_table = document.querySelector("#orders table tbody")
@@ -309,11 +311,16 @@
 
         $('#edit_profile').on('click', function(e){
             let firstname = document.querySelector('#firstname').value,
-                lastname = document.querySelector('#lastname').value
+                lastname = document.querySelector('#lastname').value,
+                password = document.querySelector('#userpassword').value,
+                zip_code = document.querySelector('#zipcode').value
+
 
             let user_data = {
                 'firstname': firstname,
                 'lastname': lastname,
+                'password': password,
+                'zip_code': zip_code,
                 'userid':'{{user.pk}}',
                 'csrfmiddlewaretoken': '{{ csrf_token }}'
             }
@@ -324,6 +331,7 @@
                 dataType: "json",
                 success: function(response) {
                     console.log(response)
+                    location.reload()
                 }
             });
         });
