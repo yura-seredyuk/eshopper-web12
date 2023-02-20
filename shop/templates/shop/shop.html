@@ -5,16 +5,16 @@
     <!-- Page Header Start -->
     <div class="container-fluid bg-secondary mb-5">
         <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
-            <h1 class="font-weight-semi-bold text-uppercase mb-3">Our Shop</h1>
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Наш магазин</h1>
             <div class="d-inline-flex">
-                <p class="m-0"><a href="{% url 'shop:homepage' %}">Home</a></p>
+                <p class="m-0"><a href="{% url 'shop:homepage' %}">Головна</a></p>
                 <p class="m-0 px-2">-</p>
                 {% if selected_category %}
-                <p class="m-0"><a href="{% url 'shop:shop_page' %}">Shop</a></p>
+                <p class="m-0"><a href="{% url 'shop:shop_page' %}">Магазин</a></p>
                 <p class="m-0 px-2">-</p>
                 <p class="m-0">{{selected_category.category_name}}</p>
                 {% else %}
-                <p class="m-0">Shop</p>
+                <p class="m-0">Магазин</p>
                 {% endif %}
             </div>
         </div>
@@ -34,11 +34,11 @@
             <div class="col-lg-3 col-md-12">
                 <!-- Price Start -->
                 <div class="border-bottom mb-4 pb-4">
-                    <h5 class="font-weight-semi-bold mb-4">Filter by price</h5>
+                    <h5 class="font-weight-semi-bold mb-4">Фільтр за ціною</h5>
                     <form>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox" class="custom-control-input" checked id="price-all">
-                            <label class="custom-control-label" for="price-all">All Price</label>
+                            <label class="custom-control-label" for="price-all">Всі ціни</label>
                             <span class="badge border font-weight-normal">1000</span>
                         </div>
                         {% for item in price_list %}
@@ -54,12 +54,12 @@
                 
                 <!-- Category Start -->
                 <div class="border-bottom mb-4 pb-4">
-                    <h5 class="font-weight-semi-bold mb-4">Filter by category</h5>
+                    <h5 class="font-weight-semi-bold mb-4">Фільтр за категоріями</h5>
                     <form name="category_form" method="post">
                         {% csrf_token %}
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox" class="custom-control-input" {% if selected_categories|length < 1 %}checked{% endif %} id="category-all" name="category-all">
-                            <label class="custom-control-label" for="category-all">All categories</label>
+                            <label class="custom-control-label" for="category-all">Всі категорії</label>
                             <span class="badge border font-weight-normal">{{products|length}}</span>
                         </div>
                         {% for category, count in categories_count.items %}
@@ -69,19 +69,19 @@
                             <span class="badge border font-weight-normal">{{count}}</span>
                         </div>
                         {% endfor %}
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Підтвердити</button>
                     </form>
                 </div>
                 <!-- Category End -->
 
                 <!-- Country Start -->
                 <div class="mb-5">
-                    <h5 class="font-weight-semi-bold mb-4">Filter by country</h5>
+                    <h5 class="font-weight-semi-bold mb-4">Фільтр за країнами</h5>
                     <form name="country_form" method="post">
                         {% csrf_token %}
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox" class="custom-control-input" {% if selected_countries|length < 1 %}checked{% endif %} id="country-all" name="country-all">
-                            <label class="custom-control-label" for="country-all">All countries</label>
+                            <label class="custom-control-label" for="country-all">Всі країни</label>
                             <span class="badge border font-weight-normal">{{products|length}}</span>
                         </div>
                         {% for country, count in countries_count.items %}
@@ -91,7 +91,7 @@
                             <span class="badge border font-weight-normal">{{count}}</span>
                         </div>
                         {% endfor %}
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Підтвердити</button>
                     </form>
                 </div>
                 <!-- Country End -->
@@ -102,31 +102,7 @@
             <!-- Shop Product Start -->
             <div class="col-lg-9 col-md-12">
                 <div class="row pb-3">
-                    <div class="col-12 pb-1">
-                        <div class="d-flex align-items-center justify-content-between mb-4">
-                            <form action="">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search by name">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text bg-transparent text-primary">
-                                            <i class="fa fa-search"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </form>
-                            <div class="dropdown ml-4">
-                                <button class="btn border dropdown-toggle" type="button" id="triggerId" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
-                                            Sort by
-                                        </button>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="triggerId">
-                                    <a class="dropdown-item" href="#">Latest</a>
-                                    <a class="dropdown-item" href="#">Popularity</a>
-                                    <a class="dropdown-item" href="#">Best Rating</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
                     {% for product in products %}
                     <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
                         <div class="card product-item border-0 mb-4">
@@ -138,16 +114,16 @@
                             <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                                 <h6 class="text-truncate mb-3"><a href="{% url 'shop:detail_page' pk=product.pk %}">{{product.product_name}}</a></h6>
                                 <div class="d-flex justify-content-center">
-                                    <h6>${{product.unit_price}}</h6>{% if product.old_price > 0 %}<h6 class="text-muted ml-2"><del>${{product.old_price}}</del></h6>{% endif %}
+                                    <h6>₴{{product.unit_price}}</h6>{% if product.old_price > 0 %}<h6 class="text-muted ml-2"><del>₴{{product.old_price}}</del></h6>{% endif %}
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-between bg-light border">
-                                <a href="{% url 'shop:detail_page' pk=product.pk %}" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>Details</a>
-                                <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-heart text-primary  mr-1"></i>Like</a>
+                                <a href="{% url 'shop:detail_page' pk=product.pk %}" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>Деталі</a>
+                                <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-heart text-primary  mr-1"></i>Вподобати</a>
                                 <form action="{% url 'cart:cart_add' product_id=product.pk %}" name="cart_add_form_{{product.pk}}" method="post">
                                     {% csrf_token %}
                                     {{cart_product_form}}
-                                    <a onClick="document.cart_add_form_{{product.pk}}.submit()" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Buy</a>
+                                    <a onClick="document.cart_add_form_{{product.pk}}.submit()" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Купити</a>
                                 </form>
                             </div>
                         </div>

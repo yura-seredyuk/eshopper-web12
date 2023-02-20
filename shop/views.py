@@ -7,8 +7,14 @@ from cart.cart import Cart
 
 def homepage(request):
     categories = ProductCategory.objects.all()
+    products = Product.objects.all()[28:36]
+    product_list = []
+    for category in categories:
+        product_list.append(Product.objects.filter(product_category=category).first())
    
-    return render(request, 'pages/index.html', {'categories':categories})
+    return render(request, 'pages/index.html', {'categories':categories,
+                                                'product_list':product_list,
+                                                'products':products})
 
 
 def shop_page(request, category_slug=None):

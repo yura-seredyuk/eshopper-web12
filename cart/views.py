@@ -67,21 +67,23 @@ def cart_checkout(request):
 
 def order(request):
     cart_data = Cart(request)
-    user = request.user
+    user =  request.user
+    print(user)
+    
     profile = Profile.objects.filter(user=user).first()
     address = profile.address
     city = address.city
-    customer = Customer.objects.filter(profile=profile).first()
-
-    for item in cart_data:
-        print(item)
-        order_data = {
-            "customer": customer,
-            "city": city,
-            "product": item["product"],
-            "price": item["total_price"]
-        }
-        print(order_data)
-        order = Order.objects.create(**order_data)
-    cart_data.clear()
-    return redirect("shop:homepage") 
+    customer = Customer.objects.filter(profile=profile.pk).first()
+    if customer:
+        for item in cart_data:
+            print(item)
+            order_data = {
+                "customer": customer,
+                "city": city,
+                "product": item["product"],
+                "price": item["total_price"]
+            }
+            print(order_data)
+            order = Order.objects.create(**order_data)
+        cart_data.clear()
+    return redirect("shop:homepage")

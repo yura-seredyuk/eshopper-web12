@@ -16,10 +16,10 @@
                 <h4 class="mb-0">{{user.first_name}} {{user.last_name}}</h4>
                 <p class="text-muted">{{user.username}}</p>
                 <div class="text-left mt-3">
-                    <p class="text-muted mb-2 font-13"><strong>Full Name :</strong> <span class="ml-2">{{user.first_name}} {{user.last_name}}</span></p>
-                    <p class="text-muted mb-2 font-13"><strong>Mobile :</strong><span class="ml-2">{{profile.phone}}</span></p>
-                    <p class="text-muted mb-2 font-13"><strong>Email :</strong> <span class="ml-2 ">{{user.email}}</span></p>
-                    <p class="text-muted mb-1 font-13"><strong>Location :</strong> <span class="ml-2">{{city.city_name}}/{{country.country_name}}</span></p>
+                    <p class="text-muted mb-2 font-13"><strong>Повне ім'я :</strong> <span class="ml-2">{{user.first_name}} {{user.last_name}}</span></p>
+                    <p class="text-muted mb-2 font-13"><strong>Номер телефону :</strong><span class="ml-2">{{profile.phone}}</span></p>
+                    <p class="text-muted mb-2 font-13"><strong>Електронна пошта :</strong> <span class="ml-2 ">{{user.email}}</span></p>
+                    <p class="text-muted mb-1 font-13"><strong>Місцезнаходження :</strong> <span class="ml-2">{{city.city_name}}/{{country.country_name}}</span></p>
                 </div>
             </div> <!-- end card-box -->
         </div> <!-- end col-->
@@ -29,19 +29,19 @@
                 <ul class="nav nav-pills navtab-bg">
                     <li class="nav-item">
                         <a href="#orders" data-toggle="tab" aria-expanded="true" class="nav-link ml-0 active">
-                            <i class="mdi mdi-cart mr-1"></i>Orders
+                            <i class="mdi mdi-cart mr-1"></i>Замовлення
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="#settings" data-toggle="tab" aria-expanded="false" class="nav-link">
-                            <i class="mdi mdi-settings-outline mr-1"></i>Settings
+                            <i class="mdi mdi-settings-outline mr-1"></i>Налаштування
                         </a>
                     </li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane show active" id="orders">
                         <h5 class="mb-4 text-uppercase"><i class="mdi mdi-cart mr-1"></i>
-                            Orders</h5>
+                            Замовлення</h5>
                         <div class="table-responsive">
                             <table class="table table-borderless mb-0">
                                 <thead class="thead-light">
@@ -50,12 +50,12 @@
                                         <th></th>
                                         {% endif %}
                                         <th>#</th>
-                                        <th>Product Name</th>
-                                        <th>Order Date</th>
-                                        <th>Quantity</th>
-                                        <th>Price</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
+                                        <th>Ім'я продукту</th>
+                                        <th>Дата замовлення</th>
+                                        <th>Кількість</th>
+                                        <th>Ціна</th>
+                                        <th>Статус</th>
+                                        <th>Дії</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -74,10 +74,10 @@
                                             <span class="badge status_{{order.status}}">{{order.status}}</span>
                                         {% elif group == 'employee' %}
                                             <select name="status" class="status badge status_{{order.status}}" >
-                                                <option value="opened" {% if order.status == "opened" %}selected{% endif %}>Opened</option>
-                                                <option value="in_progress" {% if order.status == "in_progress" %}selected{% endif %}>In progress</option>
-                                                <option value="sended" {% if order.status == "sended" %}selected{% endif %}>Sended</option>
-                                                <option value="closed" {% if order.status == "closed" %}selected{% endif %}>Closed</option>
+                                                <option value="opened" {% if order.status == "opened" %}selected{% endif %}>Відкрите</option>
+                                                <option value="in_progress" {% if order.status == "in_progress" %}selected{% endif %}>Опрацьовується</option>
+                                                <option value="sended" {% if order.status == "sended" %}selected{% endif %}>Відправлено</option>
+                                                <option value="closed" {% if order.status == "closed" %}selected{% endif %}>Закрите</option>
                                             </select>
                                         {% endif %}
                                         </td>
@@ -107,18 +107,18 @@
                     <!-- end orders content-->
 
                     <div class="tab-pane" id="settings">
-                        <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-account-circle mr-1"></i> Personal Info</h5>
+                        <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-account-circle mr-1"></i>Особиста інформація</h5>
                         <form autocomplete="off">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="firstname">First Name</label>
+                                        <label for="firstname">Ім'я</label>
                                         <input type="text" class="form-control" id="firstname" placeholder="Enter first name" value="{{user.first_name}}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="lastname">Last Name</label>
+                                        <label for="lastname">Прізвище</label>
                                         <input type="text" class="form-control" id="lastname" placeholder="Enter last name" value="{{user.last_name}}">
                                     </div>
                                 </div> <!-- end col -->
@@ -127,13 +127,13 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="birth_date">Birth date</label>
+                                        <label for="birth_date">Дата народження</label>
                                         <input type="date" class="form-control" id="birth_date" placeholder="Enter email" value="{{date_of_birth}}" max="{% now "Y-m-d" %}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="phone">Phone</label>
+                                        <label for="phone">Номер телефону</label>
                                         <input type="phone" class="form-control" id="phone" placeholder="Enter phone number" value="{{profile.phone}}">
                                     </div>
                                 </div> <!-- end col -->
@@ -141,36 +141,36 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="email">Email Address</label>
+                                        <label for="email">Електронна пошта</label>
                                         <input type="email" class="form-control" id="email" placeholder="Enter email" value="{{user.email}}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="userpassword">Password</label>
+                                        <label for="userpassword">Пароль</label>
                                         <input type="password" class="form-control" id="userpassword" placeholder="Enter password" autocomplete="new-password">
-                                        <span class="form-text text-muted"><small>If you want to change password please enter new password and save changes.</small></span>
+                                        <span class="form-text text-muted"><small>Якщо ви хочете змінити пароль, введіть новий пароль і збережіть зміни.</small></span>
                                     </div>
                                 </div> <!-- end col -->
                             </div> <!-- end row -->
 
-                            <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-office-building mr-1"></i> Address Info</h5>
+                            <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-office-building mr-1"></i> Адреса</h5>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="street">Street</label>
+                                        <label for="street">Вулиця</label>
                                         <input type="text" class="form-control" id="street" placeholder="Enter street" value="{{address.street}}">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label for="appartaments">Appartemants</label>
+                                        <label for="appartaments">Квартира</label>
                                         <input type="text" class="form-control" id="appartaments" placeholder="Enter appartaments number" value="{{address.appartaments}}">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label for="zipcode">Zip code</label>
+                                        <label for="zipcode">Поштовий індекс</label>
                                         <input type="text" class="form-control" id="zipcode" placeholder="Enter zip code" value="{{address.zip_code}}">
                                     </div>
                                 </div> <!-- end col -->
@@ -178,20 +178,20 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="city">City</label>
+                                        <label for="city">Місто</label>
                                         <input type="text" class="form-control" id="city" placeholder="Enter city" value="{{city.city_name}}">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label for="country">Country</label>
+                                        <label for="country">Країна</label>
                                         <input type="text" class="form-control" id="country" placeholder="Enter country" value="{{country.country_name}}">
                                     </div>
                                 </div> <!-- end col -->
                             </div> <!-- end row -->
 
                             <div class="text-right">
-                                <button class="btn btn-success waves-effect waves-light mt-2" id="edit_profile"><i class="mdi mdi-content-save"></i> Save</button>
+                                <button class="btn btn-success waves-effect waves-light mt-2" id="edit_profile"><i class="mdi mdi-content-save"></i> Зберегти </button>
                             </div>
                         </form>
                     </div>
