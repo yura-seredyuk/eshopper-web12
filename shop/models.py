@@ -86,29 +86,6 @@ class Customer(models.Model):
         return f"Customer: {self.profile}"
 
 
-class Manager(models.Model):
-    profile = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
-
-    class Meta:
-        verbose_name = "Manager"
-        verbose_name_plural = "Managers"
-
-    def __str__(self) -> str:
-        return f"{self.profile}"
-
-
-class Employee(models.Model):
-    profile = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
-    chief = models.ForeignKey(Manager, on_delete=models.DO_NOTHING)
-
-    class Meta:
-        verbose_name = "Employee"
-        verbose_name_plural = "Employes"
-
-    def __str__(self) -> str:
-        return f"{self.profile} {self.chief}"
-
-
 class Product(models.Model):
     product_name = models.CharField(max_length=30)
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -134,7 +111,6 @@ STATUS_CHOICES = (
     ('closed','Closed'),
 )
 class Order(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.DO_NOTHING, null=True, default=None, blank=True)
     customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
     city = models.ForeignKey(City, on_delete=models.DO_NOTHING)
     date_of_order = models.DateTimeField(default=timezone.now)

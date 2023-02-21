@@ -1,7 +1,6 @@
 from django.contrib import admin
 from .models import ProductCategory, Country, City, \
-    Address, Profile, Customer, Employee, Manager, \
-    Product, Order
+    Address, Profile, Customer, Product, Order
 
 
 class ProductCategoryAdmin(admin.ModelAdmin):
@@ -32,14 +31,6 @@ admin.site.register(Profile, ProfileAdmin)
 class CustomerAdmin(admin.ModelAdmin):
     list_display: ['profile']
 admin.site.register(Customer, CustomerAdmin)
-
-class ManagerAdmin(admin.ModelAdmin):
-    list_display: ['profile']
-admin.site.register(Manager, ManagerAdmin)
-
-class EmployeeAdmin(admin.ModelAdmin):
-    list_display: ['profile', 'chief']
-admin.site.register(Employee, EmployeeAdmin)
 
 class ProductAdmin(admin.ModelAdmin):
     list_display: ['product_name', 'unit_price', 'country', 'product_category']
